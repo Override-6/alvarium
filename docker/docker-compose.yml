@@ -1,0 +1,51 @@
+
+version: "3.0"
+
+networks:
+  alvarium:
+    driver: bridge
+
+services:
+  publisher:
+    container_name: alvarium-publisher
+    command:
+      - transit-1
+    build:
+      args:
+        name: publisher
+      context: ..
+      dockerfile: docker/scala-node.dockerfile
+    networks:
+      - alvarium
+
+  transit-1:
+    container_name: alvarium-transit
+    command:
+      - transit-2
+    build:
+      args:
+        name: transit
+      context: ..
+      dockerfile: docker/scala-node.dockerfile
+    networks:
+      - alvarium
+
+  transit-2:
+    container_name: alvarium-transit
+    command:
+      - transit-2
+    build:
+      args:
+        name: transit
+      context: ..
+      dockerfile: docker/scala-node.dockerfile
+    networks:
+      - alvarium
+
+  mosquitto-server:
+    container_name: mosquitto-server
+    image: eclipse-mosquitto:latest
+    volumes:
+      - "./mosquitto.conf:/mosquitto/config/mosquitto.conf"
+    networks:
+      - alvarium
