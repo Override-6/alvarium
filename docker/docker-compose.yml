@@ -7,8 +7,13 @@ networks:
 
 services:
   publisher:
-    container_name: alvarium-publisher
-    command:
+    container_name: publisher
+    entrypoint:
+      - java
+      - -jar
+      - ./out.jar
+      - transit-1
+    depends_on:
       - transit-1
     build:
       args:
@@ -19,8 +24,13 @@ services:
       - alvarium
 
   transit-1:
-    container_name: alvarium-transit
-    command:
+    container_name: transit-1
+    entrypoint:
+      - java
+      - -jar
+      - ./out.jar
+      - transit-2
+    depends_on:
       - transit-2
     build:
       args:
@@ -31,9 +41,11 @@ services:
       - alvarium
 
   transit-2:
-    container_name: alvarium-transit
-    command:
-      - transit-2
+    container_name: transit-2
+    entrypoint:
+      - java
+      - -jar
+      - ./out.jar
     build:
       args:
         name: transit
@@ -47,5 +59,12 @@ services:
     image: eclipse-mosquitto:latest
     volumes:
       - "./mosquitto.conf:/mosquitto/config/mosquitto.conf"
+    networks:
+      - alvarium
+
+  mosquitto-client:
+    build:
+      context: ..
+      dockerfile: docker/mosquitto-client.dockerfile
     networks:
       - alvarium

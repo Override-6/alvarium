@@ -15,10 +15,5 @@ trait AlvariumModule extends ScalaModule {
   )
 }
 
-object publisher extends AlvariumModule {
-  override def mainClass = Some("ucc.alvarium.Publisher")
-}
-
-object transit extends AlvariumModule {
-  override def mainClass = Some("ucc.alvarium.Transit")
-}
+object publisher extends AlvariumModule
+object transit extends AlvariumModule

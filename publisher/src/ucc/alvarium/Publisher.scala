@@ -4,7 +4,9 @@ import com.alvarium.annotators.AnnotatorFactory
 import com.alvarium.contracts.AnnotationType
 import com.alvarium.utils.{ImmutablePropertyBag, PropertyBag}
 import com.alvarium.{DefaultSdk, SdkInfo}
-import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.{Level, LogManager}
+import org.apache.logging.log4j.core.config.Configurator
+import sun.jvm.hotspot.HelloWorld.e
 
 import java.net.{InetAddress, InetSocketAddress, SocketAddress}
 import java.nio.ByteBuffer
@@ -12,7 +14,10 @@ import java.nio.channels.SocketChannel
 import java.util
 import scala.util.control.NonFatal
 
-val log = LogManager.getRootLogger
+val log = {
+  Configurator.setRootLevel(Level.DEBUG)
+  LogManager.getRootLogger
+}
 
 @main
 def main(next: String): Unit = {
@@ -22,13 +27,17 @@ def main(next: String): Unit = {
   val annotators = sdkInfo.getAnnotators.map(new AnnotatorFactory().getAnnotator(_, sdkInfo, log))
   val sdk = new DefaultSdk(annotators, sdkInfo, log)
 
-  val dataSocket = SocketChannel.open(InetSocketAddress.createUnresolved(next, 1242))
 
   while (true) try {
-    Thread.sleep(1000)
+    Thread.sleep(3000)
+    val dataSocket = SocketChannel.open(new InetSocketAddress(next, 1242))
+
     val data = generateData
+    log.info(s"Publishing : ${new String(data)}")
     sdk.create(data)
     dataSocket.write(ByteBuffer.wrap(data))
+
+    dataSocket.close()
   } catch
     case NonFatal(e) => e.printStackTrace()
 
