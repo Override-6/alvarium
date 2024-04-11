@@ -42,6 +42,8 @@ services:
 
   transit-2:
     container_name: transit-2
+    devices:
+      - /dev/tpm0:/dev/tpm0
     build:
       args:
         name: transit

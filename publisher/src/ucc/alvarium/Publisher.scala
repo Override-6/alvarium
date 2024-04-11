@@ -43,7 +43,7 @@ def main(next: String): Unit = {
 
 }
 
-def generateData = "Hello Cork".getBytes()
+def generateData = "Hello Cork and UCC !".getBytes()
 
 object PropertyBag {
   def apply(properties: (AnnotationType, AnyRef)*): PropertyBag = {

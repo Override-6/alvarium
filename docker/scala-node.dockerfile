@@ -3,9 +3,20 @@ WORKDIR /alvarium
 
 ARG name
 
-RUN curl -L https://raw.githubusercontent.com/lefou/millw/0.4.11/millw > mill && chmod +x mill
-ADD . .
+VOLUME ~/.cache
+VOLUME ~/.mill
+
+ADD mill build.sc ./
+RUN ./mill resolve _
+ADD lib lib
+ADD $name $name
+ADD res res
+ADD config.json .
+
+RUN ls
 RUN ./mill $name.assembly
+
+
 
 FROM eclipse-temurin:22-alpine as runtime
 WORKDIR /alvarium
