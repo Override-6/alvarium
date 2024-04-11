@@ -17,3 +17,10 @@ trait AlvariumModule extends ScalaModule {
 
 object publisher extends AlvariumModule
 object transit extends AlvariumModule
+object `mosquitto-client` extends ScalaModule {
+  def scalaVersion = "3.4.0"
+  override def ivyDeps = Agg(
+    ivy"net.sigusr::fs2-mqtt:1.0.1",
+    ivy"org.typelevel::cats-effect:3.6-0142603",
+  )
+}

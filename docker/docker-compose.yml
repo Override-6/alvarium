@@ -42,10 +42,6 @@ services:
 
   transit-2:
     container_name: transit-2
-    entrypoint:
-      - java
-      - -jar
-      - ./out.jar
     build:
       args:
         name: transit
@@ -62,7 +58,11 @@ services:
     networks:
       - alvarium
 
+
   mosquitto-client:
+    container_name: mosquitto-client
+    depends_on:
+      - mosquitto-server
     build:
       context: ..
       dockerfile: docker/mosquitto-client.dockerfile
