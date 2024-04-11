@@ -8,6 +8,7 @@ networks:
 services:
   publisher:
     container_name: publisher
+    hostname: publisher
     entrypoint:
       - java
       - -jar
@@ -25,6 +26,7 @@ services:
 
   transit-1:
     container_name: transit-1
+    hostname: transit-1
     entrypoint:
       - java
       - -jar
@@ -42,6 +44,7 @@ services:
 
   transit-2:
     container_name: transit-2
+    hostname: transit-2
     devices:
       - /dev/tpm0:/dev/tpm0
     build:
